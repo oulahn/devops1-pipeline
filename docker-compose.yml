@@ -1,0 +1,18 @@
+version: '3.5'
+services:
+  webapp:
+    image: php:apache
+    entrypoint: ["/bin/sh", "-c", "docker-php-ext-install mysqli && apache2-foreground"]
+    volumes:
+      - public:/var/www/html
+    ports:
+      - 80:80
+  database:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=lala
+      - MYSQL_DATABASE=webapp
+      - MYSQL_USER=oulahn
+      - MYSQL_PASSWORD=password
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
