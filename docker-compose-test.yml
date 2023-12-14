@@ -1,0 +1,14 @@
+version: '3.5'
+services:
+  testapp:
+    image: node
+    volumes:
+      - ./testapp:/testapp
+    entrypoint: ["/bin/sh", "-c", "npm install chai chai-http && node index.js"]
+    depends_on:
+      - webapp
+    networks:
+      - devops
+networks:
+  devops:
+    external: true

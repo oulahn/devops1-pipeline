@@ -7,6 +7,8 @@ services:
       - public:/var/www/html
     ports:
       - 80:80
+    networks:
+      - devops
   database:
     image: mysql
     environment:
@@ -16,3 +18,8 @@ services:
       - MYSQL_PASSWORD=password
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
+    networks:
+      - devops
+networks:
+  devops:
+    driver: bridge
