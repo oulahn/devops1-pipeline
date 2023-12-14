@@ -5,8 +5,6 @@ services:
     volumes:
       - ../testapp:/testapp
     entrypoint: ["/bin/sh", "-c", "npm install chai chai-http && node index.js"]
-    depends_on:
-      - webapp
     networks:
       - devops
 networks:
