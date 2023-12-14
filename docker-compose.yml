@@ -22,4 +22,5 @@ services:
       - devops
 networks:
   devops:
+    name: devops
     driver: bridge
