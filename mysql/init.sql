@@ -5,5 +5,3 @@ create table apis(
 );
 
 insert into apis(message) values("hello");
-insert into apis(message) values("how are you");
-insert into apis(message) values("i am fine");
