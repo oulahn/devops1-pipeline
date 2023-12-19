@@ -2,8 +2,12 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'oulahn-webapp-api:latest'
+        DOCKER_COMPOSE_FILE = '/API/devops/pipeline/docker-compose.yml'
+        DOCKER_COMPOSE_TEST_FILE = '/API/devops/pipeline/docker-compose-test.yml'
+        DOCKER_MACHINE_NAME = '18.181.184.53'
+        TEST_PATH = '/API/devops/testapp'
     }
+
 
     stages {
         stage('Checkout') {
@@ -12,29 +16,32 @@ pipeline {
             }
         }
 
-        stage('Build and Push Docker Image') {
+        stage('Run Docker Compose') {
             steps {
                 script {
-                    // Build and push your Docker image
-                    def dockerImage = docker.build(env.DOCKER_IMAGE)
-                    docker.withRegistry('https://hub.docker.com', 'docker-credentials') {
-                        dockerImage.push()
+                    // Connect to the Docker machine on AWS
+                    sh "eval \$(docker-machine env ${DOCKER_MACHINE_NAME})"
+
+                    // Run Docker Compose to start your application
+                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                script {
+                    // Navigate to the directory containing the tests
+                    dir(TEST_PATH) {
+                        // Run tests using a command compatible with your testing framework
+                        // For example, if using Mocha and Chai:
+                        sh "npm install"  // Install dependencies if needed
+                        npx mocha index.js
                     }
                 }
             }
         }
 
-        stage('Deploy') {
-            steps {
-                script {
-                    // Deploy your application using the Docker image
-                    docker.withRegistry('https://registry.example.com', 'docker-credentials') {
-                        docker.image(env.DOCKER_IMAGE).run('-p 8080:80 --name webapp-api')
-                    }
-                }
-            }
-        }
-    }
 
     post {
         success {
