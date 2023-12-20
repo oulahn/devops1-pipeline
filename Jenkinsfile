@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_COMPOSE_FILE = '/API/devops/pipeline/docker-compose.yml'
         DOCKER_COMPOSE_TEST_FILE = '/API/devops/pipeline/docker-compose-test.yml'
-        DOCKER_MACHINE_NAME = '18.181.184.53'
+    //    DOCKER_MACHINE_NAME = '18.181.184.53'
         TEST_PATH = '/API/devops/testapp'
     }
     
@@ -21,24 +21,11 @@ pipeline {
             steps {
                 script {
                     // Connect to the Docker machine on AWS
-                    sh "eval \$(docker-machine env ${DOCKER_MACHINE_NAME})"
+                    //sh "eval \$(docker-machine env ${DOCKER_MACHINE_NAME})"
 
                     // Run Docker Compose to start your application
                     sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
-                }
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                script {
-                    // Navigate to the directory containing the tests
-                    dir(TEST_PATH) {
-                        // Run tests using a command compatible with your testing framework
-                        // For example, if using Mocha and Chai:
-                        sh "npm install"  // Install dependencies if needed
-                        npx mocha index.js
-                    }
+                    sh "docker-compose -f ${DOCKER_COMPOSE_TEST_FILE} up -d"
                 }
             }
         }
