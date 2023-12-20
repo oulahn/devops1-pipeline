@@ -4,7 +4,7 @@ services:
     image: node
     volumes:
       - ../testapp:/testapp
-    entrypoint: ["/bin/sh", "-c", "cd /testapp && npm install chai chai-http mocha && mocha"]
+    entrypoint: ["/bin/sh", "-c", "cd /testapp && npm install -g chai chai-http mocha && mocha index.js"]
     networks:
       - devops
 networks:
