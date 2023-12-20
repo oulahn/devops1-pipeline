@@ -7,6 +7,7 @@ pipeline {
         DOCKER_MACHINE_NAME = '18.181.184.53'
         TEST_PATH = '/API/devops/testapp'
     }
+    
 
 
     stages {
